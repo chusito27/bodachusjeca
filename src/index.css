@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@theme {
+  /* Static colors (don't change with theme) */
+  --color-gold: #D4AF37;
+  --color-gold-dark: #B8960C;
+  --color-gold-light: #E8D48B;
+  --color-dark: #1A1A1A;
+  --color-dark-light: #2D2D2D;
+  --color-success: #22C55E;
+  --color-error: #EF4444;
+  --color-warning: #F59E0B;
+
+  /* Dynamic semantic colors (change with .dark class) */
+  --color-cream: var(--bg-base);
+  --color-text: var(--text-base);
+  --color-text-light: var(--text-muted);
+  --color-surface: var(--surface-base);
+  --color-surface-elevated: var(--surface-raised);
+  --color-border: var(--border-base);
+}
+
+/* Light mode (default) */
+:root {
+  --bg-base: #F5F5F0;
+  --surface-base: #FFFFFF;
+  --surface-raised: #FAFAFA;
+  --border-base: #F3F4F6;
+  --text-base: #333333;
+  --text-muted: #666666;
+}
+
+/* Dark mode */
+.dark {
+  --bg-base: #121212;
+  --surface-base: #1E1E1E;
+  --surface-raised: #2A2A2A;
+  --border-base: #333333;
+  --text-base: #E5E5E5;
+  --text-muted: #9CA3AF;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-cream);
+  color: var(--color-text);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-raised);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-gold);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gold-dark);
+}
