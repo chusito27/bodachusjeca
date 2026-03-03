@@ -40,8 +40,8 @@ export default function GalleryPage() {
     setUploading(true)
     try {
       for (const file of files) {
-        const { url, path } = await galleryService.upload(file, user.uid)
-        await add({ url, path, category: uploadCategory, description: uploadDescription })
+        const { url } = await galleryService.upload(file)
+        await add({ url, category: uploadCategory, description: uploadDescription })
       }
       toast.success('Fotos subidas exitosamente')
       setUploadModalOpen(false)
@@ -56,9 +56,6 @@ export default function GalleryPage() {
   }
 
   const handleDelete = async (photo) => {
-    try {
-      if (photo.path) await galleryService.deleteFile(photo.path)
-    } catch (e) { /* ignore storage errors */ }
     await remove(photo.id)
   }
 

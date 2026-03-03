@@ -1,9 +1,8 @@
 import { db } from './firebase'
 import { collection, doc, getDocs, addDoc, updateDoc, deleteDoc, query, where, orderBy, serverTimestamp } from 'firebase/firestore'
-import { storage } from './firebase'
-import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage'
 
 const COLLECTION = 'gallery'
+const IMGBB_API_KEY = '856f90c4d5b5d658378dffbfc3daa28d'
 
 export const galleryService = {
   async getAll(userId) {
@@ -29,15 +28,22 @@ export const galleryService = {
     return await deleteDoc(doc(db, COLLECTION, id))
   },
 
-  async upload(file, userId) {
-    const storageRef = ref(storage, `gallery/${userId}/${Date.now()}_${file.name}`)
-    const snapshot = await uploadBytes(storageRef, file)
-    const url = await getDownloadURL(snapshot.ref)
-    return { url, path: snapshot.ref.fullPath }
-  },
+  async upload(file) {
+    const formData = new FormData()
+    formData.append('key', IMGBB_API_KEY)
+    formData.append('image', file)
 
-  async deleteFile(path) {
-    const storageRef = ref(storage, path)
-    return await deleteObject(storageRef)
+    const response = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+      method: 'POST',
+      body: formData
+    })
+
+    const data = await response.json()
+
+    if (!data.success) {
+      throw new Error('Error al subir imagen a imgBB')
+    }
+
+    return { url: data.data.display_url }
   }
 }

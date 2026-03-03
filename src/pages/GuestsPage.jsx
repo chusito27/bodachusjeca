@@ -13,11 +13,13 @@ import StatsCard from '../components/ui/StatsCard'
 import { useFirestore } from '../hooks/useFirestore'
 import { guestService } from '../services/guestService'
 import { GUEST_GROUPS, RSVP_STATUS } from '../utils/constants'
-import { IoAdd, IoSearch, IoPeopleOutline, IoCheckmarkCircle, IoHourglass, IoCloseCircle, IoCreateOutline, IoTrashOutline } from 'react-icons/io5'
+import GuestReport from '../components/guests/GuestReport'
+import { IoAdd, IoSearch, IoPeopleOutline, IoCheckmarkCircle, IoHourglass, IoCloseCircle, IoCreateOutline, IoTrashOutline, IoClose, IoDocumentTextOutline } from 'react-icons/io5'
 
 const emptyGuest = {
   name: '', email: '', phone: '', group: 'amigos',
   rsvpStatus: 'pendiente', plusOne: false, plusOneName: '',
+  allowChildren: false, children: [],
   dietaryRestrictions: '', notes: ''
 }
 
@@ -27,6 +29,8 @@ export default function GuestsPage() {
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [selectedGuest, setSelectedGuest] = useState(null)
   const [form, setForm] = useState(emptyGuest)
+  const [childName, setChildName] = useState('')
+  const [reportOpen, setReportOpen] = useState(false)
   const [search, setSearch] = useState('')
   const [filterGroup, setFilterGroup] = useState('')
   const [filterRsvp, setFilterRsvp] = useState('')
@@ -46,18 +50,21 @@ export default function GuestsPage() {
     confirmed: guests.filter(g => g.rsvpStatus === 'confirmado').length,
     pending: guests.filter(g => g.rsvpStatus === 'pendiente').length,
     declined: guests.filter(g => g.rsvpStatus === 'declinado').length,
-    plusOnes: guests.filter(g => g.plusOne).length
+    plusOnes: guests.filter(g => g.plusOne).length,
+    totalChildren: guests.reduce((sum, g) => sum + (g.children?.length || 0), 0)
   }), [guests])
 
   const openCreate = () => {
     setForm(emptyGuest)
     setSelectedGuest(null)
+    setChildName('')
     setModalOpen(true)
   }
 
   const openEdit = (guest) => {
-    setForm({ ...emptyGuest, ...guest })
+    setForm({ ...emptyGuest, ...guest, children: guest.children || [] })
     setSelectedGuest(guest)
+    setChildName('')
     setModalOpen(true)
   }
 
@@ -88,11 +95,12 @@ export default function GuestsPage() {
       <Header title="Invitados" />
       <div className="p-6">
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
           <StatsCard icon={<IoPeopleOutline />} label="Total" value={stats.total} color="gold" />
           <StatsCard icon={<IoCheckmarkCircle />} label="Confirmados" value={stats.confirmed} color="success" />
           <StatsCard icon={<IoHourglass />} label="Pendientes" value={stats.pending} color="warning" />
           <StatsCard icon={<IoCloseCircle />} label="Declinados" value={stats.declined} color="error" />
+          <StatsCard icon={<IoPeopleOutline />} label="Hijos" value={stats.totalChildren} color="gold" />
         </div>
 
         {/* Filters */}
@@ -119,6 +127,9 @@ export default function GuestsPage() {
                 <option value="">Todos los estados</option>
                 {RSVP_STATUS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
               </Input>
+              <Button variant="secondary" onClick={() => setReportOpen(true)}>
+                <IoDocumentTextOutline className="mr-1" /> Reporte
+              </Button>
               <Button onClick={openCreate}>
                 <IoAdd className="mr-1" /> Añadir
               </Button>
@@ -144,6 +155,7 @@ export default function GuestsPage() {
                     <th className="text-left px-6 py-3 text-xs font-medium text-text-light uppercase hidden md:table-cell">Grupo</th>
                     <th className="text-left px-6 py-3 text-xs font-medium text-text-light uppercase">RSVP</th>
                     <th className="text-left px-6 py-3 text-xs font-medium text-text-light uppercase hidden lg:table-cell">+1</th>
+                    <th className="text-left px-6 py-3 text-xs font-medium text-text-light uppercase hidden lg:table-cell">Hijos</th>
                     <th className="text-right px-6 py-3 text-xs font-medium text-text-light uppercase">Acciones</th>
                   </tr>
                 </thead>
@@ -163,6 +175,11 @@ export default function GuestsPage() {
                       <td className="px-6 py-3 hidden lg:table-cell">
                         <span className="text-sm text-text-light">
                           {guest.plusOne ? (guest.plusOneName || 'Sí') : 'No'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-3 hidden lg:table-cell">
+                        <span className="text-sm text-text-light">
+                          {guest.allowChildren ? (guest.children?.length || 0) : 'No'}
                         </span>
                       </td>
                       <td className="px-6 py-3 text-right">
@@ -206,6 +223,48 @@ export default function GuestsPage() {
             {form.plusOne && (
               <Input label="Nombre del acompañante" value={form.plusOneName} onChange={(e) => setForm({...form, plusOneName: e.target.value})} />
             )}
+            <div className="flex items-center gap-2 mb-4">
+              <input type="checkbox" id="allowChildren" checked={form.allowChildren} onChange={(e) => setForm({...form, allowChildren: e.target.checked, children: e.target.checked ? form.children : []})} className="rounded" />
+              <label htmlFor="allowChildren" className="text-sm">Permitir hijos</label>
+            </div>
+            {form.allowChildren && (
+              <div className="mb-4 pl-4 border-l-2 border-gold/30">
+                {form.children.length > 0 && (
+                  <div className="space-y-2 mb-3">
+                    {form.children.map((child, idx) => (
+                      <div key={idx} className="flex items-center justify-between bg-surface-elevated rounded-lg px-3 py-2">
+                        <span className="text-sm text-text">{child.name}</span>
+                        <button type="button" onClick={() => setForm({...form, children: form.children.filter((_, i) => i !== idx)})} className="text-text-light hover:text-error transition-colors">
+                          <IoClose size={16} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="Nombre del hijo/a"
+                    value={childName}
+                    onChange={(e) => setChildName(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && childName.trim()) {
+                        e.preventDefault()
+                        setForm({...form, children: [...form.children, { name: childName.trim() }]})
+                        setChildName('')
+                      }
+                    }}
+                    className="flex-1 px-3 py-2 border border-border rounded-lg text-sm bg-surface text-text focus:outline-none focus:ring-2 focus:ring-gold/50"
+                  />
+                  <Button type="button" size="sm" onClick={() => {
+                    if (childName.trim()) {
+                      setForm({...form, children: [...form.children, { name: childName.trim() }]})
+                      setChildName('')
+                    }
+                  }}>Añadir</Button>
+                </div>
+              </div>
+            )}
             <Input label="Restricciones alimentarias" value={form.dietaryRestrictions} onChange={(e) => setForm({...form, dietaryRestrictions: e.target.value})} />
             <Input label="Notas" type="textarea" value={form.notes} onChange={(e) => setForm({...form, notes: e.target.value})} />
             <div className="flex gap-3 justify-end mt-6">
@@ -222,6 +281,11 @@ export default function GuestsPage() {
           title="Eliminar invitado"
           message={`¿Seguro que quieres eliminar a ${selectedGuest?.name}?`}
         />
+
+        {/* Report Modal */}
+        <Modal isOpen={reportOpen} onClose={() => setReportOpen(false)} title="Reporte de Invitados" size="full">
+          <GuestReport guests={guests} stats={stats} onClose={() => setReportOpen(false)} />
+        </Modal>
       </div>
     </Layout>
   )
