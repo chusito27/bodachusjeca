@@ -2,11 +2,11 @@
 
 @theme {
   /* Static colors (don't change with theme) */
-  --color-gold: #D4AF37;
-  --color-gold-dark: #B8960C;
-  --color-gold-light: #E8D48B;
-  --color-dark: #1A1A1A;
-  --color-dark-light: #2D2D2D;
+  --color-gold: #C06B84;
+  --color-gold-dark: #9E4E68;
+  --color-gold-light: #F0C4D0;
+  --color-dark: #2C1E28;
+  --color-dark-light: #3C2E38;
   --color-success: #22C55E;
   --color-error: #EF4444;
   --color-warning: #F59E0B;
@@ -22,22 +22,22 @@
 
 /* Light mode (default) */
 :root {
-  --bg-base: #F5F5F0;
+  --bg-base: #FDF5F7;
   --surface-base: #FFFFFF;
-  --surface-raised: #FAFAFA;
-  --border-base: #F3F4F6;
-  --text-base: #333333;
-  --text-muted: #666666;
+  --surface-raised: #FBF0F2;
+  --border-base: #F0E0E4;
+  --text-base: #3D2D33;
+  --text-muted: #8C7580;
 }
 
 /* Dark mode */
 .dark {
-  --bg-base: #121212;
-  --surface-base: #1E1E1E;
-  --surface-raised: #2A2A2A;
-  --border-base: #333333;
-  --text-base: #E5E5E5;
-  --text-muted: #9CA3AF;
+  --bg-base: #1A1218;
+  --surface-base: #241C22;
+  --surface-raised: #302830;
+  --border-base: #3D3038;
+  --text-base: #F0E5EA;
+  --text-muted: #A89CA4;
 }
 
 body {
@@ -59,10 +59,10 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-gold);
+  background: var(--color-gold-light);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-gold-dark);
+  background: var(--color-gold);
 }

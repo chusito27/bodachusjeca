@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react'
 import { differenceInDays, differenceInHours, differenceInMinutes, differenceInSeconds } from 'date-fns'
-import { WEDDING_DATE } from '../../utils/constants'
 
-export default function Countdown() {
+export default function Countdown({ targetDate }) {
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft())
 
   function calculateTimeLeft() {
     const now = new Date()
-    const target = WEDDING_DATE
+    const target = targetDate instanceof Date ? targetDate : new Date(targetDate)
 
-    if (now >= target) return { days: 0, hours: 0, minutes: 0, seconds: 0 }
+    if (!targetDate || now >= target) return { days: 0, hours: 0, minutes: 0, seconds: 0 }
 
     const days = differenceInDays(target, now)
     const hours = differenceInHours(target, now) % 24
@@ -24,7 +23,7 @@ export default function Countdown() {
       setTimeLeft(calculateTimeLeft())
     }, 1000)
     return () => clearInterval(timer)
-  }, [])
+  }, [targetDate])
 
   const units = [
     { value: timeLeft.days, label: 'Días' },
@@ -34,13 +33,13 @@ export default function Countdown() {
   ]
 
   return (
-    <div className="flex gap-4 justify-center">
+    <div className="flex gap-2 sm:gap-4 justify-center">
       {units.map(({ value, label }) => (
         <div key={label} className="text-center">
-          <div className="bg-dark text-gold font-bold text-3xl md:text-4xl rounded-xl w-20 h-20 md:w-24 md:h-24 flex items-center justify-center shadow-lg">
+          <div className="bg-dark text-gold font-bold text-2xl sm:text-3xl md:text-4xl rounded-xl w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center shadow-lg">
             {String(value).padStart(2, '0')}
           </div>
-          <p className="text-text-light text-sm mt-2">{label}</p>
+          <p className="text-text-light text-xs sm:text-sm mt-1 sm:mt-2">{label}</p>
         </div>
       ))}
     </div>

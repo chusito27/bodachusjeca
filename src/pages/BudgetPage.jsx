@@ -71,7 +71,7 @@ export default function BudgetPage() {
   return (
     <Layout>
       <Header title="Presupuesto" />
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           <StatsCard icon={<IoTrendingUp />} label="Estimado Total" value={formatCurrency(stats.estimated)} color="gold" />
@@ -105,7 +105,7 @@ export default function BudgetPage() {
 
         {/* Filters & Add */}
         <div className="flex flex-wrap gap-4 items-end mb-6">
-          <Input type="select" value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)} className="mb-0 min-w-[180px]">
+          <Input type="select" value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)} className="mb-0 min-w-full sm:min-w-[180px]">
             <option value="">Todas las categorías</option>
             {BUDGET_CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.icon} {c.label}</option>)}
           </Input>
@@ -121,28 +121,28 @@ export default function BudgetPage() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-border">
-                    <th className="text-left px-6 py-3 text-xs font-medium text-text-light uppercase">Concepto</th>
-                    <th className="text-left px-6 py-3 text-xs font-medium text-text-light uppercase hidden md:table-cell">Categoría</th>
-                    <th className="text-right px-6 py-3 text-xs font-medium text-text-light uppercase">Estimado</th>
-                    <th className="text-right px-6 py-3 text-xs font-medium text-text-light uppercase">Real</th>
-                    <th className="text-left px-6 py-3 text-xs font-medium text-text-light uppercase">Estado</th>
-                    <th className="text-right px-6 py-3 text-xs font-medium text-text-light uppercase">Acciones</th>
+                    <th className="text-left px-3 sm:px-6 py-3 text-xs font-medium text-text-light uppercase">Concepto</th>
+                    <th className="text-left px-3 sm:px-6 py-3 text-xs font-medium text-text-light uppercase hidden md:table-cell">Categoría</th>
+                    <th className="text-right px-3 sm:px-6 py-3 text-xs font-medium text-text-light uppercase hidden sm:table-cell">Estimado</th>
+                    <th className="text-right px-3 sm:px-6 py-3 text-xs font-medium text-text-light uppercase">Real</th>
+                    <th className="text-left px-3 sm:px-6 py-3 text-xs font-medium text-text-light uppercase hidden sm:table-cell">Estado</th>
+                    <th className="text-right px-3 sm:px-6 py-3 text-xs font-medium text-text-light uppercase">Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filtered.map(expense => (
                     <tr key={expense.id} className="border-b border-border hover:bg-surface-elevated/50">
-                      <td className="px-6 py-3">
-                        <p className="text-sm font-medium text-text">{expense.concept}</p>
-                        {expense.vendorName && <p className="text-xs text-text-light">{expense.vendorName}</p>}
+                      <td className="px-3 sm:px-6 py-3">
+                        <p className="text-sm font-medium text-text truncate max-w-[100px] sm:max-w-none">{expense.concept}</p>
+                        {expense.vendorName && <p className="text-xs text-text-light truncate max-w-[100px] sm:max-w-none">{expense.vendorName}</p>}
                       </td>
-                      <td className="px-6 py-3 hidden md:table-cell">
+                      <td className="px-3 sm:px-6 py-3 hidden md:table-cell">
                         <span className="text-sm">{BUDGET_CATEGORIES.find(c => c.value === expense.category)?.icon} {BUDGET_CATEGORIES.find(c => c.value === expense.category)?.label}</span>
                       </td>
-                      <td className="px-6 py-3 text-right text-sm">{formatCurrency(expense.estimatedAmount)}</td>
-                      <td className="px-6 py-3 text-right text-sm font-medium">{formatCurrency(expense.realAmount)}</td>
-                      <td className="px-6 py-3">{paymentBadge(expense.paymentStatus)}</td>
-                      <td className="px-6 py-3 text-right">
+                      <td className="px-3 sm:px-6 py-3 text-right text-sm hidden sm:table-cell">{formatCurrency(expense.estimatedAmount)}</td>
+                      <td className="px-3 sm:px-6 py-3 text-right text-sm font-medium">{formatCurrency(expense.realAmount)}</td>
+                      <td className="px-3 sm:px-6 py-3 hidden sm:table-cell">{paymentBadge(expense.paymentStatus)}</td>
+                      <td className="px-3 sm:px-6 py-3 text-right">
                         <div className="flex gap-1 justify-end">
                           <Button variant="ghost" size="sm" onClick={() => openEdit(expense)}><IoCreateOutline size={16} /></Button>
                           <Button variant="ghost" size="sm" onClick={() => { setSelectedExpense(expense); setConfirmOpen(true) }}><IoTrashOutline size={16} className="text-error" /></Button>
@@ -163,7 +163,7 @@ export default function BudgetPage() {
             <Input label="Categoría" type="select" value={form.category} onChange={(e) => setForm({...form, category: e.target.value})}>
               {BUDGET_CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.icon} {c.label}</option>)}
             </Input>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input label="Monto Estimado" type="number" value={form.estimatedAmount} onChange={(e) => setForm({...form, estimatedAmount: e.target.value})} />
               <Input label="Monto Real" type="number" value={form.realAmount} onChange={(e) => setForm({...form, realAmount: e.target.value})} />
             </div>

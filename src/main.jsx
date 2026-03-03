@@ -5,6 +5,7 @@ import { Toaster } from 'react-hot-toast'
 import App from './App'
 import { AuthProvider } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
+import { WeddingProvider } from './context/WeddingContext'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -12,6 +13,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <ThemeProvider>
       <AuthProvider>
+      <WeddingProvider>
         <App />
         <Toaster
           position="top-right"
@@ -30,6 +32,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             },
           }}
         />
+      </WeddingProvider>
       </AuthProvider>
       </ThemeProvider>
     </BrowserRouter>

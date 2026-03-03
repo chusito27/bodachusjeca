@@ -13,6 +13,8 @@ import TimelinePage from './pages/TimelinePage'
 import MusicPage from './pages/MusicPage'
 import GalleryPage from './pages/GalleryPage'
 import MenuPage from './pages/MenuPage'
+import WeddingsPage from './pages/WeddingsPage'
+import UsersPage from './pages/UsersPage'
 
 export default function App() {
   const { user, loading } = useAuth()
@@ -30,6 +32,8 @@ export default function App() {
       <Route path="/login" element={user ? <Navigate to="/" /> : <LoginPage />} />
       <Route path="/register" element={user ? <Navigate to="/" /> : <RegisterPage />} />
 
+      <Route path="/bodas" element={<PrivateRoute><WeddingsPage /></PrivateRoute>} />
+      <Route path="/usuarios" element={<PrivateRoute requiredRole="admin"><UsersPage /></PrivateRoute>} />
       <Route path="/" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
       <Route path="/invitados" element={<PrivateRoute><GuestsPage /></PrivateRoute>} />
       <Route path="/presupuesto" element={<PrivateRoute><BudgetPage /></PrivateRoute>} />

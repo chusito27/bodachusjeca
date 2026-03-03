@@ -45,7 +45,7 @@ export default function TimelinePage() {
   return (
     <Layout>
       <Header title="Cronograma del Día" />
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         <div className="flex justify-between items-center mb-6">
           <p className="text-text-light text-sm">{events.length} eventos programados</p>
           <Button onClick={openCreate}><IoAdd className="mr-1" /> Añadir Evento</Button>
@@ -94,7 +94,7 @@ export default function TimelinePage() {
                             )}
                           </div>
                         </div>
-                        <div className="flex gap-1 flex-shrink-0 ml-4">
+                        <div className="flex gap-1 flex-shrink-0 ml-2 sm:ml-4">
                           <Button variant="ghost" size="sm" onClick={() => openEdit(event)}><IoCreateOutline size={16} /></Button>
                           <Button variant="ghost" size="sm" onClick={() => { setSelectedEvent(event); setConfirmOpen(true) }}><IoTrashOutline size={16} className="text-error" /></Button>
                         </div>
@@ -111,12 +111,12 @@ export default function TimelinePage() {
         <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title={selectedEvent ? 'Editar Evento' : 'Nuevo Evento'}>
           <form onSubmit={handleSubmit}>
             <Input label="Título" value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} required />
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input label="Hora Inicio" type="time" value={form.startTime} onChange={(e) => setForm({...form, startTime: e.target.value})} />
               <Input label="Hora Fin" type="time" value={form.endTime} onChange={(e) => setForm({...form, endTime: e.target.value})} />
             </div>
             <Input label="Descripción" type="textarea" value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} />
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input label="Ubicación" value={form.location} onChange={(e) => setForm({...form, location: e.target.value})} />
               <Input label="Responsable" value={form.responsible} onChange={(e) => setForm({...form, responsible: e.target.value})} />
             </div>

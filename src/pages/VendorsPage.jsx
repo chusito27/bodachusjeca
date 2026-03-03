@@ -52,10 +52,10 @@ export default function VendorsPage() {
   return (
     <Layout>
       <Header title="Proveedores" />
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         {/* Filters */}
         <div className="flex flex-wrap gap-4 items-end mb-6">
-          <div className="flex-1 min-w-[200px]">
+          <div className="flex-1 min-w-full sm:min-w-[200px]">
             <div className="relative">
               <IoSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-text-light" />
               <input type="text" placeholder="Buscar proveedor..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full pl-10 pr-4 py-2 border border-border rounded-lg text-sm bg-surface text-text focus:outline-none focus:ring-2 focus:ring-gold/50" />
@@ -103,11 +103,11 @@ export default function VendorsPage() {
             <Input label="Categoría" type="select" value={form.category} onChange={(e) => setForm({...form, category: e.target.value})}>
               {BUDGET_CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.icon} {c.label}</option>)}
             </Input>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input label="Contacto" value={form.contact} onChange={(e) => setForm({...form, contact: e.target.value})} />
               <Input label="Precio" type="number" value={form.price} onChange={(e) => setForm({...form, price: e.target.value})} />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input label="Email" type="email" value={form.email} onChange={(e) => setForm({...form, email: e.target.value})} />
               <Input label="Teléfono" value={form.phone} onChange={(e) => setForm({...form, phone: e.target.value})} />
             </div>

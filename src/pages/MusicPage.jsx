@@ -52,10 +52,10 @@ export default function MusicPage() {
   return (
     <Layout>
       <Header title="Música / Playlist" />
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         {/* Filters */}
         <div className="flex flex-wrap gap-4 items-end mb-6">
-          <Input type="select" value={filterMoment} onChange={(e) => setFilterMoment(e.target.value)} className="mb-0 min-w-[180px]">
+          <Input type="select" value={filterMoment} onChange={(e) => setFilterMoment(e.target.value)} className="mb-0 min-w-full sm:min-w-[180px]">
             <option value="">Todos los momentos</option>
             {MUSIC_MOMENTS.map(m => <option key={m.value} value={m.value}>{m.label}</option>)}
           </Input>

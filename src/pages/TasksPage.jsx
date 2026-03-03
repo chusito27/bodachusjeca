@@ -65,7 +65,7 @@ export default function TasksPage() {
   return (
     <Layout>
       <Header title="Tareas" />
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         {/* Progress */}
         <Card className="mb-6">
           <CardBody>
@@ -79,11 +79,11 @@ export default function TasksPage() {
 
         {/* Filters & Add */}
         <div className="flex flex-wrap gap-4 items-end mb-6">
-          <Input type="select" value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} className="mb-0 min-w-[150px]">
+          <Input type="select" value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} className="mb-0 min-w-full sm:min-w-[150px]">
             <option value="">Todos los estados</option>
             {TASK_STATUS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
           </Input>
-          <Input type="select" value={filterPriority} onChange={(e) => setFilterPriority(e.target.value)} className="mb-0 min-w-[150px]">
+          <Input type="select" value={filterPriority} onChange={(e) => setFilterPriority(e.target.value)} className="mb-0 min-w-full sm:min-w-[150px]">
             <option value="">Todas las prioridades</option>
             {TASK_PRIORITIES.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
           </Input>
@@ -127,7 +127,7 @@ export default function TasksPage() {
           <form onSubmit={handleSubmit}>
             <Input label="Título" value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} required />
             <Input label="Descripción" type="textarea" value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} />
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input label="Categoría" type="select" value={form.category} onChange={(e) => setForm({...form, category: e.target.value})}>
                 {TASK_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
               </Input>
@@ -135,7 +135,7 @@ export default function TasksPage() {
                 {TASK_PRIORITIES.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
               </Input>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input label="Estado" type="select" value={form.status} onChange={(e) => setForm({...form, status: e.target.value})}>
                 {TASK_STATUS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
               </Input>

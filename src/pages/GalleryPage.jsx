@@ -64,10 +64,10 @@ export default function GalleryPage() {
   return (
     <Layout>
       <Header title="Galería de Fotos" />
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         {/* Filters */}
         <div className="flex flex-wrap gap-4 items-end mb-6">
-          <Input type="select" value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)} className="mb-0 min-w-[180px]">
+          <Input type="select" value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)} className="mb-0 min-w-full sm:min-w-[180px]">
             <option value="">Todas las categorías</option>
             {GALLERY_CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
           </Input>

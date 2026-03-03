@@ -11,6 +11,7 @@ import EmptyState from '../components/ui/EmptyState'
 import LoadingSpinner from '../components/ui/LoadingSpinner'
 import { useFirestore } from '../hooks/useFirestore'
 import { useAuth } from '../hooks/useAuth'
+import { useWedding } from '../hooks/useWedding'
 import { seatingService } from '../services/seatingService'
 import { guestService } from '../services/guestService'
 import { IoAdd, IoCreateOutline, IoTrashOutline, IoPersonAdd, IoClose } from 'react-icons/io5'
@@ -20,6 +21,7 @@ const emptyTable = { name: '', capacity: 8 }
 export default function SeatingPage() {
   const { data: tables, loading, add, update, remove } = useFirestore(seatingService)
   const { user } = useAuth()
+  const { selectedWedding } = useWedding()
   const [guests, setGuests] = useState([])
   const [modalOpen, setModalOpen] = useState(false)
   const [assignModalOpen, setAssignModalOpen] = useState(false)
@@ -28,10 +30,10 @@ export default function SeatingPage() {
   const [form, setForm] = useState(emptyTable)
 
   useEffect(() => {
-    if (user) {
-      guestService.getAll(user.uid).then(setGuests).catch(console.error)
+    if (user && selectedWedding) {
+      guestService.getAll(user.uid, selectedWedding.id).then(setGuests).catch(console.error)
     }
-  }, [user])
+  }, [user, selectedWedding])
 
   const getTableGuests = (table) => {
     return guests.filter(g => (table.guestIds || []).includes(g.id))
@@ -67,7 +69,7 @@ export default function SeatingPage() {
   return (
     <Layout>
       <Header title="Mesas / Asientos" />
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         {/* Summary */}
         <div className="flex flex-wrap gap-4 items-center justify-between mb-6">
           <div className="flex gap-4">
@@ -152,7 +154,7 @@ export default function SeatingPage() {
           {unassignedGuests.length === 0 ? (
             <p className="text-text-light text-center py-4">Todos los invitados están asignados</p>
           ) : (
-            <div className="space-y-1 max-h-80 overflow-y-auto">
+            <div className="space-y-1 max-h-[60vh] overflow-y-auto">
               {unassignedGuests.map(guest => (
                 <div key={guest.id} className="flex items-center justify-between px-3 py-2 hover:bg-surface-elevated rounded-lg">
                   <span className="text-sm">{guest.name}</span>

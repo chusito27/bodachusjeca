@@ -5,16 +5,17 @@ const COLLECTION = 'gallery'
 const IMGBB_API_KEY = '856f90c4d5b5d658378dffbfc3daa28d'
 
 export const galleryService = {
-  async getAll(userId) {
-    const q = query(collection(db, COLLECTION), where('userId', '==', userId), orderBy('createdAt', 'desc'))
+  async getAll(userId, weddingId) {
+    const q = query(collection(db, COLLECTION), where('userId', '==', userId), where('weddingId', '==', weddingId), orderBy('createdAt', 'desc'))
     const snapshot = await getDocs(q)
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
   },
 
-  async add(data, userId) {
+  async add(data, userId, weddingId) {
     return await addDoc(collection(db, COLLECTION), {
       ...data,
       userId,
+      weddingId,
       createdAt: serverTimestamp()
     })
   },

@@ -23,7 +23,7 @@ export default function RegisterForm() {
     try {
       await register(email, password, displayName)
       navigate('/')
-      toast.success('¡Cuenta creada exitosamente!')
+      toast.success('Cuenta creada. Pendiente de aprobación por un administrador.')
     } catch (error) {
       toast.error('Error al crear cuenta')
     } finally {

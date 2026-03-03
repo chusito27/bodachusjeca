@@ -4,7 +4,7 @@ import { GUEST_GROUPS, RSVP_STATUS } from '../../utils/constants'
 import Button from '../ui/Button'
 import { IoDownloadOutline } from 'react-icons/io5'
 
-const GOLD = '#D4AF37'
+const GOLD = '#C06B84'
 const DARK = '#333333'
 const LIGHT_BG = '#F9F9F6'
 const BORDER = '#E0E0E0'
@@ -12,7 +12,7 @@ const BORDER = '#E0E0E0'
 const groupLabel = (value) => GUEST_GROUPS.find(g => g.value === value)?.label || value
 const rsvpLabel = (value) => RSVP_STATUS.find(r => r.value === value)?.label || value
 
-export default function GuestReport({ guests, stats, onClose }) {
+export default function GuestReport({ guests, stats, onClose, weddingName, weddingDate }) {
   const reportRef = useRef()
   const [exporting, setExporting] = useState(false)
 
@@ -21,7 +21,7 @@ export default function GuestReport({ guests, stats, onClose }) {
     try {
       const opt = {
         margin: [10, 10, 10, 10],
-        filename: 'invitados-boda-chus-y-jeca.pdf',
+        filename: `invitados-${(weddingName || 'boda').toLowerCase().replace(/\s+/g, '-')}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2 },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
@@ -98,9 +98,11 @@ export default function GuestReport({ guests, stats, onClose }) {
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '24px', borderBottom: `3px solid ${GOLD}`, paddingBottom: '16px' }}>
           <h1 style={{ fontSize: '28px', fontWeight: '700', color: GOLD, margin: '0 0 4px 0' }}>
-            Boda Chus & Jeca
+            {weddingName || 'Boda'}
           </h1>
-          <p style={{ fontSize: '14px', color: '#666', margin: '0 0 2px 0' }}>27 de Febrero de 2027</p>
+          <p style={{ fontSize: '14px', color: '#666', margin: '0 0 2px 0' }}>
+            {weddingDate ? new Date(weddingDate).toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }) : ''}
+          </p>
           <p style={{ fontSize: '11px', color: '#999', margin: '0' }}>
             Reporte generado el {new Date().toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' })}
           </p>

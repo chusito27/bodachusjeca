@@ -13,7 +13,7 @@ export default function Input({ label, type = 'text', value, onChange, placehold
           placeholder={placeholder}
           required={required}
           rows={3}
-          className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold text-sm bg-surface text-text resize-none"
+          className="w-full px-3 py-2.5 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold text-base sm:text-sm bg-surface text-text resize-none"
           {...props}
         />
       ) : type === 'select' ? (
@@ -21,7 +21,7 @@ export default function Input({ label, type = 'text', value, onChange, placehold
           value={value}
           onChange={onChange}
           required={required}
-          className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold text-sm bg-surface text-text"
+          className="w-full px-3 py-2.5 min-h-[44px] border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold text-base sm:text-sm bg-surface text-text"
           {...props}
         >
           {props.children}
@@ -33,7 +33,7 @@ export default function Input({ label, type = 'text', value, onChange, placehold
           onChange={onChange}
           placeholder={placeholder}
           required={required}
-          className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold text-sm bg-surface text-text"
+          className="w-full px-3 py-2.5 min-h-[44px] border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold text-base sm:text-sm bg-surface text-text"
           {...props}
         />
       )}

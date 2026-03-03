@@ -55,10 +55,10 @@ export default function MenuPage() {
   return (
     <Layout>
       <Header title="Menú" />
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         {/* Filters */}
         <div className="flex flex-wrap gap-4 items-end mb-6">
-          <Input type="select" value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)} className="mb-0 min-w-[180px]">
+          <Input type="select" value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)} className="mb-0 min-w-full sm:min-w-[180px]">
             <option value="">Todas las categorías</option>
             {MENU_CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
           </Input>
@@ -92,7 +92,7 @@ export default function MenuPage() {
                               {item.isGlutenFree && <Badge variant="info">Sin Gluten</Badge>}
                             </div>
                           </div>
-                          <div className="flex gap-1 flex-shrink-0 ml-4">
+                          <div className="flex gap-1 flex-shrink-0 ml-2 sm:ml-4">
                             <Button variant="ghost" size="sm" onClick={() => openEdit(item)}><IoCreateOutline size={16} /></Button>
                             <Button variant="ghost" size="sm" onClick={() => { setSelectedItem(item); setConfirmOpen(true) }}><IoTrashOutline size={16} className="text-error" /></Button>
                           </div>

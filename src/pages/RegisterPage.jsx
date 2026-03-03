@@ -5,8 +5,8 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center bg-cream p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-text">Chus & Jeca</h1>
-          <p className="text-gold mt-2">27 de Febrero, 2027</p>
+          <h1 className="text-3xl font-bold text-text">Planea Tu Boda</h1>
+          <p className="text-gold mt-2">Organiza cada detalle</p>
           <div className="w-16 h-0.5 bg-gold mx-auto mt-4" />
         </div>
         <div className="bg-surface rounded-xl shadow-sm border border-border p-8">

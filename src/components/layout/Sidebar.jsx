@@ -1,9 +1,11 @@
 import { NavLink } from 'react-router-dom'
-import { IoHomeOutline, IoPeopleOutline, IoWalletOutline, IoBusinessOutline, IoCheckboxOutline, IoGridOutline, IoTimeOutline, IoMusicalNotesOutline, IoImagesOutline, IoRestaurantOutline, IoLogOutOutline, IoMenuOutline, IoCloseOutline, IoSunnyOutline, IoMoonOutline } from 'react-icons/io5'
+import { IoHomeOutline, IoPeopleOutline, IoWalletOutline, IoBusinessOutline, IoCheckboxOutline, IoGridOutline, IoTimeOutline, IoMusicalNotesOutline, IoImagesOutline, IoRestaurantOutline, IoLogOutOutline, IoMenuOutline, IoCloseOutline, IoSunnyOutline, IoMoonOutline, IoHeartOutline, IoShieldOutline } from 'react-icons/io5'
 import { useState } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import { useTheme } from '../../hooks/useTheme'
+import { useWedding } from '../../hooks/useWedding'
 import { useNavigate } from 'react-router-dom'
+import { formatDate } from '../../utils/formatters'
 import toast from 'react-hot-toast'
 
 const navItems = [
@@ -21,9 +23,12 @@ const navItems = [
 
 export default function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false)
-  const { logout } = useAuth()
+  const { logout, userProfile } = useAuth()
   const { theme, toggleTheme } = useTheme()
+  const { selectedWedding } = useWedding()
   const navigate = useNavigate()
+
+  const isAdmin = userProfile?.role === 'admin'
 
   const handleLogout = async () => {
     try {
@@ -38,11 +43,47 @@ export default function Sidebar() {
   const sidebarContent = (
     <>
       <div className="px-6 py-6">
-        <h1 className="text-xl font-bold text-gold">Chus & Jeca</h1>
-        <p className="text-xs text-gray-400 mt-1">27 de Febrero, 2027</p>
+        <h1 className="text-xl font-bold text-gold">
+          {selectedWedding?.name || 'Planea Tu Boda'}
+        </h1>
+        <p className="text-xs text-[#B8A0B4] mt-1">
+          {selectedWedding?.date ? formatDate(new Date(selectedWedding.date)) : 'Selecciona una boda'}
+        </p>
       </div>
 
       <nav className="flex-1 px-3">
+        {isAdmin && (
+          <NavLink
+            to="/bodas"
+            onClick={() => setMobileOpen(false)}
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors mb-1 ${
+                isActive
+                  ? 'bg-gold/10 text-gold'
+                  : 'text-[#D4BCD0] hover:bg-white/5 hover:text-white'
+              }`
+            }
+          >
+            <IoHeartOutline size={18} />
+            Mis Bodas
+          </NavLink>
+        )}
+        {isAdmin && (
+          <NavLink
+            to="/usuarios"
+            onClick={() => setMobileOpen(false)}
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors mb-1 ${
+                isActive
+                  ? 'bg-gold/10 text-gold'
+                  : 'text-[#D4BCD0] hover:bg-white/5 hover:text-white'
+              }`
+            }
+          >
+            <IoShieldOutline size={18} />
+            Usuarios
+          </NavLink>
+        )}
         {navItems.map(({ to, icon: Icon, label }) => (
           <NavLink
             key={to}
@@ -53,7 +94,7 @@ export default function Sidebar() {
               `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors mb-1 ${
                 isActive
                   ? 'bg-gold/10 text-gold'
-                  : 'text-gray-300 hover:bg-white/5 hover:text-white'
+                  : 'text-[#D4BCD0] hover:bg-white/5 hover:text-white'
               }`
             }
           >
@@ -66,14 +107,14 @@ export default function Sidebar() {
       <div className="px-3 pb-6 space-y-1">
         <button
           onClick={toggleTheme}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:bg-white/5 hover:text-white transition-colors w-full"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[#B8A0B4] hover:bg-white/5 hover:text-white transition-colors w-full"
         >
           {theme === 'dark' ? <IoSunnyOutline size={18} /> : <IoMoonOutline size={18} />}
           {theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro'}
         </button>
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:bg-white/5 hover:text-white transition-colors w-full"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[#B8A0B4] hover:bg-white/5 hover:text-white transition-colors w-full"
         >
           <IoLogOutOutline size={18} />
           Cerrar Sesión

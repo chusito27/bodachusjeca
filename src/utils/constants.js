@@ -1,5 +1,3 @@
-export const WEDDING_DATE = new Date('2027-02-27T12:00:00')
-
 export const GUEST_GROUPS = [
   { value: 'familia_novia', label: 'Familia Novia' },
   { value: 'familia_novio', label: 'Familia Novio' },
@@ -72,6 +70,11 @@ export const GALLERY_CATEGORIES = [
   { value: 'pruebas', label: 'Pruebas' },
   { value: 'invitaciones', label: 'Invitaciones' },
   { value: 'otros', label: 'Otros' }
+]
+
+export const USER_ROLES = [
+  { value: 'admin', label: 'Administrador', color: 'error' },
+  { value: 'dueno', label: 'Dueño', color: 'gold' }
 ]
 
 export const MENU_CATEGORIES = [

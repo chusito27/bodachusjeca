@@ -11,6 +11,7 @@ import EmptyState from '../components/ui/EmptyState'
 import LoadingSpinner from '../components/ui/LoadingSpinner'
 import StatsCard from '../components/ui/StatsCard'
 import { useFirestore } from '../hooks/useFirestore'
+import { useWedding } from '../hooks/useWedding'
 import { guestService } from '../services/guestService'
 import { GUEST_GROUPS, RSVP_STATUS } from '../utils/constants'
 import GuestReport from '../components/guests/GuestReport'
@@ -25,6 +26,7 @@ const emptyGuest = {
 
 export default function GuestsPage() {
   const { data: guests, loading, add, update, remove } = useFirestore(guestService)
+  const { selectedWedding } = useWedding()
   const [modalOpen, setModalOpen] = useState(false)
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [selectedGuest, setSelectedGuest] = useState(null)
@@ -93,9 +95,9 @@ export default function GuestsPage() {
   return (
     <Layout>
       <Header title="Invitados" />
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mb-6">
           <StatsCard icon={<IoPeopleOutline />} label="Total" value={stats.total} color="gold" />
           <StatsCard icon={<IoCheckmarkCircle />} label="Confirmados" value={stats.confirmed} color="success" />
           <StatsCard icon={<IoHourglass />} label="Pendientes" value={stats.pending} color="warning" />
@@ -107,7 +109,7 @@ export default function GuestsPage() {
         <Card className="mb-6">
           <CardBody>
             <div className="flex flex-wrap gap-4 items-end">
-              <div className="flex-1 min-w-[200px]">
+              <div className="flex-1 min-w-full sm:min-w-[200px]">
                 <div className="relative">
                   <IoSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-text-light" />
                   <input
@@ -119,11 +121,11 @@ export default function GuestsPage() {
                   />
                 </div>
               </div>
-              <Input type="select" value={filterGroup} onChange={(e) => setFilterGroup(e.target.value)} className="mb-0 min-w-[150px]">
+              <Input type="select" value={filterGroup} onChange={(e) => setFilterGroup(e.target.value)} className="mb-0 min-w-full sm:min-w-[150px]">
                 <option value="">Todos los grupos</option>
                 {GUEST_GROUPS.map(g => <option key={g.value} value={g.value}>{g.label}</option>)}
               </Input>
-              <Input type="select" value={filterRsvp} onChange={(e) => setFilterRsvp(e.target.value)} className="mb-0 min-w-[150px]">
+              <Input type="select" value={filterRsvp} onChange={(e) => setFilterRsvp(e.target.value)} className="mb-0 min-w-full sm:min-w-[150px]">
                 <option value="">Todos los estados</option>
                 {RSVP_STATUS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
               </Input>
@@ -151,38 +153,38 @@ export default function GuestsPage() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-border">
-                    <th className="text-left px-6 py-3 text-xs font-medium text-text-light uppercase">Nombre</th>
-                    <th className="text-left px-6 py-3 text-xs font-medium text-text-light uppercase hidden md:table-cell">Grupo</th>
-                    <th className="text-left px-6 py-3 text-xs font-medium text-text-light uppercase">RSVP</th>
-                    <th className="text-left px-6 py-3 text-xs font-medium text-text-light uppercase hidden lg:table-cell">+1</th>
-                    <th className="text-left px-6 py-3 text-xs font-medium text-text-light uppercase hidden lg:table-cell">Hijos</th>
-                    <th className="text-right px-6 py-3 text-xs font-medium text-text-light uppercase">Acciones</th>
+                    <th className="text-left px-3 sm:px-6 py-3 text-xs font-medium text-text-light uppercase">Nombre</th>
+                    <th className="text-left px-3 sm:px-6 py-3 text-xs font-medium text-text-light uppercase hidden md:table-cell">Grupo</th>
+                    <th className="text-left px-3 sm:px-6 py-3 text-xs font-medium text-text-light uppercase">RSVP</th>
+                    <th className="text-left px-3 sm:px-6 py-3 text-xs font-medium text-text-light uppercase hidden lg:table-cell">+1</th>
+                    <th className="text-left px-3 sm:px-6 py-3 text-xs font-medium text-text-light uppercase hidden lg:table-cell">Hijos</th>
+                    <th className="text-right px-3 sm:px-6 py-3 text-xs font-medium text-text-light uppercase">Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filtered.map(guest => (
                     <tr key={guest.id} className="border-b border-border hover:bg-surface-elevated/50">
-                      <td className="px-6 py-3">
-                        <p className="text-sm font-medium text-text">{guest.name}</p>
-                        <p className="text-xs text-text-light">{guest.email}</p>
+                      <td className="px-3 sm:px-6 py-3">
+                        <p className="text-sm font-medium text-text truncate max-w-[120px] sm:max-w-none">{guest.name}</p>
+                        <p className="text-xs text-text-light truncate max-w-[120px] sm:max-w-none">{guest.email}</p>
                       </td>
-                      <td className="px-6 py-3 hidden md:table-cell">
+                      <td className="px-3 sm:px-6 py-3 hidden md:table-cell">
                         <span className="text-sm text-text-light">
                           {GUEST_GROUPS.find(g => g.value === guest.group)?.label || guest.group}
                         </span>
                       </td>
-                      <td className="px-6 py-3">{rsvpBadge(guest.rsvpStatus)}</td>
-                      <td className="px-6 py-3 hidden lg:table-cell">
+                      <td className="px-3 sm:px-6 py-3">{rsvpBadge(guest.rsvpStatus)}</td>
+                      <td className="px-3 sm:px-6 py-3 hidden lg:table-cell">
                         <span className="text-sm text-text-light">
                           {guest.plusOne ? (guest.plusOneName || 'Sí') : 'No'}
                         </span>
                       </td>
-                      <td className="px-6 py-3 hidden lg:table-cell">
+                      <td className="px-3 sm:px-6 py-3 hidden lg:table-cell">
                         <span className="text-sm text-text-light">
                           {guest.allowChildren ? (guest.children?.length || 0) : 'No'}
                         </span>
                       </td>
-                      <td className="px-6 py-3 text-right">
+                      <td className="px-3 sm:px-6 py-3 text-right">
                         <div className="flex gap-1 justify-end">
                           <Button variant="ghost" size="sm" onClick={() => openEdit(guest)}>
                             <IoCreateOutline size={16} />
@@ -204,11 +206,11 @@ export default function GuestsPage() {
         <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title={selectedGuest ? 'Editar Invitado' : 'Nuevo Invitado'}>
           <form onSubmit={handleSubmit}>
             <Input label="Nombre" value={form.name} onChange={(e) => setForm({...form, name: e.target.value})} required />
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input label="Email" type="email" value={form.email} onChange={(e) => setForm({...form, email: e.target.value})} />
               <Input label="Teléfono" value={form.phone} onChange={(e) => setForm({...form, phone: e.target.value})} />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input label="Grupo" type="select" value={form.group} onChange={(e) => setForm({...form, group: e.target.value})}>
                 {GUEST_GROUPS.map(g => <option key={g.value} value={g.value}>{g.label}</option>)}
               </Input>
@@ -284,7 +286,7 @@ export default function GuestsPage() {
 
         {/* Report Modal */}
         <Modal isOpen={reportOpen} onClose={() => setReportOpen(false)} title="Reporte de Invitados" size="full">
-          <GuestReport guests={guests} stats={stats} onClose={() => setReportOpen(false)} />
+          <GuestReport guests={guests} stats={stats} onClose={() => setReportOpen(false)} weddingName={selectedWedding?.name} weddingDate={selectedWedding?.date} />
         </Modal>
       </div>
     </Layout>

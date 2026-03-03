@@ -7,28 +7,34 @@ import Card, { CardBody } from '../components/ui/Card'
 import ProgressBar from '../components/ui/ProgressBar'
 import LoadingSpinner from '../components/ui/LoadingSpinner'
 import { useAuth } from '../hooks/useAuth'
+import { useWedding } from '../hooks/useWedding'
 import { guestService } from '../services/guestService'
 import { budgetService } from '../services/budgetService'
 import { taskService } from '../services/taskService'
 import { vendorService } from '../services/vendorService'
 import { IoPeopleOutline, IoWalletOutline, IoCheckboxOutline, IoBusinessOutline } from 'react-icons/io5'
-import { formatCurrency, daysUntil } from '../utils/formatters'
-import { WEDDING_DATE } from '../utils/constants'
+import { formatCurrency, formatDate, daysUntil } from '../utils/formatters'
 
 export default function DashboardPage() {
   const { user } = useAuth()
+  const { selectedWedding } = useWedding()
   const [stats, setStats] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function loadStats() {
-      if (!user) return
+      if (!user || !selectedWedding) {
+        setLoading(false)
+        return
+      }
       try {
+        setLoading(true)
+        const weddingId = selectedWedding.id
         const [guests, expenses, tasks, vendors] = await Promise.all([
-          guestService.getAll(user.uid),
-          budgetService.getAll(user.uid),
-          taskService.getAll(user.uid),
-          vendorService.getAll(user.uid)
+          guestService.getAll(user.uid, weddingId),
+          budgetService.getAll(user.uid, weddingId),
+          taskService.getAll(user.uid, weddingId),
+          vendorService.getAll(user.uid, weddingId)
         ])
 
         const confirmedGuests = guests.filter(g => g.rsvpStatus === 'confirmado').length
@@ -54,21 +60,25 @@ export default function DashboardPage() {
       }
     }
     loadStats()
-  }, [user])
+  }, [user, selectedWedding])
 
-  const days = daysUntil(WEDDING_DATE)
+  const weddingDate = selectedWedding?.date ? new Date(selectedWedding.date) : null
+  const days = weddingDate ? daysUntil(weddingDate) : 0
 
   return (
     <Layout>
       <Header title="Dashboard" />
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         {/* Countdown */}
         <Card className="mb-8">
           <CardBody className="py-8">
             <h2 className="text-center text-lg font-medium text-text-light mb-6">
-              Faltan <span className="text-gold font-bold">{days}</span> días para la boda
+              {weddingDate
+                ? <>Faltan <span className="text-gold font-bold">{days}</span> días para la boda</>
+                : 'Selecciona una boda para ver la cuenta regresiva'
+              }
             </h2>
-            <Countdown />
+            {weddingDate && <Countdown targetDate={weddingDate} />}
           </CardBody>
         </Card>
 
@@ -140,7 +150,7 @@ export default function DashboardPage() {
                   <div className="space-y-3">
                     <div className="flex justify-between items-center py-2 border-b border-border">
                       <span className="text-sm text-text-light">Fecha de Boda</span>
-                      <span className="text-sm font-medium">27 Feb 2027</span>
+                      <span className="text-sm font-medium">{weddingDate ? formatDate(weddingDate) : '—'}</span>
                     </div>
                     <div className="flex justify-between items-center py-2 border-b border-border">
                       <span className="text-sm text-text-light">Días restantes</span>
