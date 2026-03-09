@@ -11,7 +11,7 @@ import EmptyState from '../components/ui/EmptyState'
 import LoadingSpinner from '../components/ui/LoadingSpinner'
 import { useFirestore } from '../hooks/useFirestore'
 import { useAuth } from '../hooks/useAuth'
-import { useWedding } from '../hooks/useWedding'
+import { useEvent } from '../hooks/useEvent'
 import { seatingService } from '../services/seatingService'
 import { guestService } from '../services/guestService'
 import { IoAdd, IoCreateOutline, IoTrashOutline, IoPersonAdd, IoClose } from 'react-icons/io5'
@@ -21,7 +21,7 @@ const emptyTable = { name: '', capacity: 8 }
 export default function SeatingPage() {
   const { data: tables, loading, add, update, remove } = useFirestore(seatingService)
   const { user } = useAuth()
-  const { selectedWedding } = useWedding()
+  const { selectedEvent } = useEvent()
   const [guests, setGuests] = useState([])
   const [modalOpen, setModalOpen] = useState(false)
   const [assignModalOpen, setAssignModalOpen] = useState(false)
@@ -30,10 +30,10 @@ export default function SeatingPage() {
   const [form, setForm] = useState(emptyTable)
 
   useEffect(() => {
-    if (user && selectedWedding) {
-      guestService.getAll(user.uid, selectedWedding.id).then(setGuests).catch(console.error)
+    if (user && selectedEvent) {
+      guestService.getAll(user.uid, selectedEvent.id).then(setGuests).catch(console.error)
     }
-  }, [user, selectedWedding])
+  }, [user, selectedEvent])
 
   const getTableGuests = (table) => {
     return guests.filter(g => (table.guestIds || []).includes(g.id))

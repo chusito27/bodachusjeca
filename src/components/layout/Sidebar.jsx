@@ -3,7 +3,7 @@ import { IoHomeOutline, IoPeopleOutline, IoWalletOutline, IoBusinessOutline, IoC
 import { useState } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import { useTheme } from '../../hooks/useTheme'
-import { useWedding } from '../../hooks/useWedding'
+import { useEvent } from '../../hooks/useEvent'
 import { useNavigate } from 'react-router-dom'
 import { formatDate } from '../../utils/formatters'
 import toast from 'react-hot-toast'
@@ -25,7 +25,7 @@ export default function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const { logout, userProfile } = useAuth()
   const { theme, toggleTheme } = useTheme()
-  const { selectedWedding } = useWedding()
+  const { selectedEvent } = useEvent()
   const navigate = useNavigate()
 
   const isAdmin = userProfile?.role === 'admin'
@@ -44,17 +44,17 @@ export default function Sidebar() {
     <>
       <div className="px-6 py-6">
         <h1 className="text-xl font-bold text-gold">
-          {selectedWedding?.name || 'Planea Tu Boda'}
+          {selectedEvent?.name || 'Planea Tu Evento'}
         </h1>
         <p className="text-xs text-[#B8A0B4] mt-1">
-          {selectedWedding?.date ? formatDate(new Date(selectedWedding.date)) : 'Selecciona una boda'}
+          {selectedEvent?.date ? formatDate(new Date(selectedEvent.date)) : 'Selecciona un evento'}
         </p>
       </div>
 
       <nav className="flex-1 px-3">
         {isAdmin && (
           <NavLink
-            to="/bodas"
+            to="/eventos"
             onClick={() => setMobileOpen(false)}
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors mb-1 ${
@@ -65,7 +65,7 @@ export default function Sidebar() {
             }
           >
             <IoHeartOutline size={18} />
-            Mis Bodas
+            Mis Eventos
           </NavLink>
         )}
         {isAdmin && (

@@ -66,7 +66,7 @@ export default function VendorsPage() {
 
         {/* Vendor Cards */}
         {filtered.length === 0 ? (
-          <EmptyState icon="🏢" title="No hay proveedores" description="Añade los proveedores de tu boda" action={<Button onClick={openCreate}><IoAdd className="mr-1" /> Añadir</Button>} />
+          <EmptyState icon="🏢" title="No hay proveedores" description="Añade los proveedores del evento" action={<Button onClick={openCreate}><IoAdd className="mr-1" /> Añadir</Button>} />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filtered.map(vendor => (

@@ -7,7 +7,7 @@ import Card, { CardBody } from '../components/ui/Card'
 import ProgressBar from '../components/ui/ProgressBar'
 import LoadingSpinner from '../components/ui/LoadingSpinner'
 import { useAuth } from '../hooks/useAuth'
-import { useWedding } from '../hooks/useWedding'
+import { useEvent } from '../hooks/useEvent'
 import { guestService } from '../services/guestService'
 import { budgetService } from '../services/budgetService'
 import { taskService } from '../services/taskService'
@@ -17,24 +17,24 @@ import { formatCurrency, formatDate, daysUntil } from '../utils/formatters'
 
 export default function DashboardPage() {
   const { user } = useAuth()
-  const { selectedWedding } = useWedding()
+  const { selectedEvent } = useEvent()
   const [stats, setStats] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function loadStats() {
-      if (!user || !selectedWedding) {
+      if (!user || !selectedEvent) {
         setLoading(false)
         return
       }
       try {
         setLoading(true)
-        const weddingId = selectedWedding.id
+        const eventId = selectedEvent.id
         const [guests, expenses, tasks, vendors] = await Promise.all([
-          guestService.getAll(user.uid, weddingId),
-          budgetService.getAll(user.uid, weddingId),
-          taskService.getAll(user.uid, weddingId),
-          vendorService.getAll(user.uid, weddingId)
+          guestService.getAll(user.uid, eventId),
+          budgetService.getAll(user.uid, eventId),
+          taskService.getAll(user.uid, eventId),
+          vendorService.getAll(user.uid, eventId)
         ])
 
         const confirmedGuests = guests.filter(g => g.rsvpStatus === 'confirmado').length
@@ -60,10 +60,10 @@ export default function DashboardPage() {
       }
     }
     loadStats()
-  }, [user, selectedWedding])
+  }, [user, selectedEvent])
 
-  const weddingDate = selectedWedding?.date ? new Date(selectedWedding.date) : null
-  const days = weddingDate ? daysUntil(weddingDate) : 0
+  const eventDate = selectedEvent?.date ? new Date(selectedEvent.date) : null
+  const days = eventDate ? daysUntil(eventDate) : 0
 
   return (
     <Layout>
@@ -73,12 +73,12 @@ export default function DashboardPage() {
         <Card className="mb-8">
           <CardBody className="py-8">
             <h2 className="text-center text-lg font-medium text-text-light mb-6">
-              {weddingDate
-                ? <>Faltan <span className="text-gold font-bold">{days}</span> días para la boda</>
-                : 'Selecciona una boda para ver la cuenta regresiva'
+              {eventDate
+                ? <>Faltan <span className="text-gold font-bold">{days}</span> días para el evento</>
+                : 'Selecciona un evento para ver la cuenta regresiva'
               }
             </h2>
-            {weddingDate && <Countdown targetDate={weddingDate} />}
+            {eventDate && <Countdown targetDate={eventDate} />}
           </CardBody>
         </Card>
 
@@ -149,8 +149,8 @@ export default function DashboardPage() {
                   <h3 className="font-semibold text-text mb-4">Resumen Rápido</h3>
                   <div className="space-y-3">
                     <div className="flex justify-between items-center py-2 border-b border-border">
-                      <span className="text-sm text-text-light">Fecha de Boda</span>
-                      <span className="text-sm font-medium">{weddingDate ? formatDate(weddingDate) : '—'}</span>
+                      <span className="text-sm text-text-light">Fecha del Evento</span>
+                      <span className="text-sm font-medium">{eventDate ? formatDate(eventDate) : '—'}</span>
                     </div>
                     <div className="flex justify-between items-center py-2 border-b border-border">
                       <span className="text-sm text-text-light">Días restantes</span>
@@ -172,7 +172,7 @@ export default function DashboardPage() {
         ) : (
           <Card>
             <CardBody className="text-center py-12">
-              <p className="text-text-light">¡Bienvenido! Comienza a planificar tu boda.</p>
+              <p className="text-text-light">¡Bienvenido! Comienza a planificar tu evento.</p>
             </CardBody>
           </Card>
         )}

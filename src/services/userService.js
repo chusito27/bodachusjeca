@@ -22,7 +22,7 @@ export const userService = {
       email: data.email || '',
       displayName: data.displayName || '',
       role: null,
-      weddingId: null,
+      eventId: null,
       createdAt: serverTimestamp()
     })
   },
@@ -36,10 +36,10 @@ export const userService = {
     return await deleteDoc(doc(db, COLLECTION, uid))
   },
 
-  async clearWeddingAssignment(weddingId) {
-    const q = query(collection(db, COLLECTION), where('weddingId', '==', weddingId))
+  async clearEventAssignment(eventId) {
+    const q = query(collection(db, COLLECTION), where('eventId', '==', eventId))
     const snapshot = await getDocs(q)
-    const updates = snapshot.docs.map(d => updateDoc(d.ref, { weddingId: null }))
+    const updates = snapshot.docs.map(d => updateDoc(d.ref, { eventId: null }))
     return await Promise.all(updates)
   }
 }

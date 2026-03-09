@@ -67,7 +67,7 @@ export default function MusicPage() {
 
         {/* Song List */}
         {filtered.length === 0 ? (
-          <EmptyState icon="🎵" title="No hay canciones" description="Crea tu playlist de boda" action={<Button onClick={openCreate}><IoAdd className="mr-1" /> Añadir Canción</Button>} />
+          <EmptyState icon="🎵" title="No hay canciones" description="Crea tu playlist del evento" action={<Button onClick={openCreate}><IoAdd className="mr-1" /> Añadir Canción</Button>} />
         ) : (
           <div className="space-y-6">
             {Object.entries(grouped).map(([moment, songList]) => (

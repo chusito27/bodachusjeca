@@ -8,7 +8,7 @@ import Badge from '../components/ui/Badge'
 import LoadingSpinner from '../components/ui/LoadingSpinner'
 import { useAuth } from '../hooks/useAuth'
 import { userService } from '../services/userService'
-import { weddingService } from '../services/weddingService'
+import { eventService } from '../services/eventService'
 import { USER_ROLES } from '../utils/constants'
 import { IoCreateOutline, IoShieldOutline } from 'react-icons/io5'
 import toast from 'react-hot-toast'
@@ -16,11 +16,11 @@ import toast from 'react-hot-toast'
 export default function UsersPage() {
   const { user } = useAuth()
   const [users, setUsers] = useState([])
-  const [weddings, setWeddings] = useState([])
+  const [events, setEvents] = useState([])
   const [loading, setLoading] = useState(true)
   const [modalOpen, setModalOpen] = useState(false)
   const [editing, setEditing] = useState(null)
-  const [form, setForm] = useState({ role: '', weddingId: '' })
+  const [form, setForm] = useState({ role: '', eventId: '' })
 
   useEffect(() => {
     loadData()
@@ -29,12 +29,12 @@ export default function UsersPage() {
   const loadData = async () => {
     try {
       setLoading(true)
-      const [usersResult, weddingsResult] = await Promise.all([
+      const [usersResult, eventsResult] = await Promise.all([
         userService.getAll(),
-        weddingService.getAll(user.uid)
+        eventService.getAll(user.uid)
       ])
       setUsers(usersResult)
-      setWeddings(weddingsResult)
+      setEvents(eventsResult)
     } catch (error) {
       console.error('Error loading users:', error)
       toast.error('Error al cargar usuarios')
@@ -47,7 +47,7 @@ export default function UsersPage() {
     setEditing(u)
     setForm({
       role: u.role || '',
-      weddingId: u.weddingId || ''
+      eventId: u.eventId || ''
     })
     setModalOpen(true)
   }
@@ -59,7 +59,7 @@ export default function UsersPage() {
     try {
       const updateData = {
         role: form.role || null,
-        weddingId: form.role === 'dueno' ? (form.weddingId || null) : null
+        eventId: form.role === 'dueno' ? (form.eventId || null) : null
       }
       await userService.update(editing.uid, updateData)
       setUsers(users.map(u => u.uid === editing.uid ? { ...u, ...updateData } : u))
@@ -77,15 +77,15 @@ export default function UsersPage() {
     return <Badge variant={found.color}>{found.label}</Badge>
   }
 
-  const getWeddingName = (weddingId) => {
-    if (!weddingId) return '—'
-    const w = weddings.find(w => w.id === weddingId)
-    return w ? w.name : 'Boda no encontrada'
+  const getEventName = (eventId) => {
+    if (!eventId) return '—'
+    const ev = events.find(ev => ev.id === eventId)
+    return ev ? ev.name : 'Evento no encontrado'
   }
 
-  // Weddings not already assigned to another dueño (except the one being edited)
-  const availableWeddings = weddings.filter(w => {
-    const assignedTo = users.find(u => u.weddingId === w.id && u.role === 'dueno' && u.uid !== editing?.uid)
+  // Events not already assigned to another dueño (except the one being edited)
+  const availableEvents = events.filter(ev => {
+    const assignedTo = users.find(u => u.eventId === ev.id && u.role === 'dueno' && u.uid !== editing?.uid)
     return !assignedTo
   })
 
@@ -93,7 +93,7 @@ export default function UsersPage() {
 
   if (loading) {
     return (
-      <Layout requireWedding={false}>
+      <Layout requireEvent={false}>
         <Header title="Usuarios" />
         <LoadingSpinner />
       </Layout>
@@ -101,7 +101,7 @@ export default function UsersPage() {
   }
 
   return (
-    <Layout requireWedding={false}>
+    <Layout requireEvent={false}>
       <Header title="Usuarios" />
       <div className="p-4 sm:p-6">
         <div className="flex justify-between items-center mb-6">
@@ -125,7 +125,7 @@ export default function UsersPage() {
 
                 {u.role === 'dueno' && (
                   <p className="text-xs text-text-light mb-3">
-                    Boda: <span className="font-medium text-text">{getWeddingName(u.weddingId)}</span>
+                    Evento: <span className="font-medium text-text">{getEventName(u.eventId)}</span>
                   </p>
                 )}
 
@@ -160,7 +160,7 @@ export default function UsersPage() {
                 <label className="block text-sm font-medium text-text mb-1">Rol</label>
                 <select
                   value={form.role}
-                  onChange={(e) => setForm({ ...form, role: e.target.value, weddingId: e.target.value === 'dueno' ? form.weddingId : '' })}
+                  onChange={(e) => setForm({ ...form, role: e.target.value, eventId: e.target.value === 'dueno' ? form.eventId : '' })}
                   className="w-full border border-border rounded-lg px-3 py-2 bg-surface text-text text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
                 >
                   <option value="">Sin Rol (Pendiente)</option>
@@ -172,15 +172,15 @@ export default function UsersPage() {
 
               {form.role === 'dueno' && (
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-text mb-1">Boda Asignada</label>
+                  <label className="block text-sm font-medium text-text mb-1">Evento Asignado</label>
                   <select
-                    value={form.weddingId}
-                    onChange={(e) => setForm({ ...form, weddingId: e.target.value })}
+                    value={form.eventId}
+                    onChange={(e) => setForm({ ...form, eventId: e.target.value })}
                     className="w-full border border-border rounded-lg px-3 py-2 bg-surface text-text text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
                   >
-                    <option value="">Sin boda asignada</option>
-                    {availableWeddings.map(w => (
-                      <option key={w.id} value={w.id}>{w.name}</option>
+                    <option value="">Sin evento asignado</option>
+                    {availableEvents.map(ev => (
+                      <option key={ev.id} value={ev.id}>{ev.name}</option>
                     ))}
                   </select>
                 </div>

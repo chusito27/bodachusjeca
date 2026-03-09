@@ -1,9 +1,9 @@
 import { db } from './firebase'
 import { collection, doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, query, where, orderBy, serverTimestamp } from 'firebase/firestore'
 
-const COLLECTION = 'weddings'
+const COLLECTION = 'events'
 
-export const weddingService = {
+export const eventService = {
   async getAll(userId) {
     const q = query(collection(db, COLLECTION), where('userId', '==', userId), orderBy('createdAt', 'desc'))
     const snapshot = await getDocs(q)

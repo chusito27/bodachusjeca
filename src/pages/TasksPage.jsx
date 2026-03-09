@@ -92,7 +92,7 @@ export default function TasksPage() {
 
         {/* Task List */}
         {filtered.length === 0 ? (
-          <EmptyState icon="✅" title="No hay tareas" description="Crea tu checklist de boda" action={<Button onClick={openCreate}><IoAdd className="mr-1" /> Añadir Tarea</Button>} />
+          <EmptyState icon="✅" title="No hay tareas" description="Crea tu checklist del evento" action={<Button onClick={openCreate}><IoAdd className="mr-1" /> Añadir Tarea</Button>} />
         ) : (
           <div className="space-y-2">
             {filtered.map(task => (

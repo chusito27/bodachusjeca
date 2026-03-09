@@ -1,23 +1,23 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useAuth } from './useAuth'
-import { useWedding } from './useWedding'
+import { useEvent } from './useEvent'
 import toast from 'react-hot-toast'
 
 export function useFirestore(service) {
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true)
   const { user } = useAuth()
-  const { selectedWedding } = useWedding()
+  const { selectedEvent } = useEvent()
 
   const fetchData = useCallback(async () => {
-    if (!user || !selectedWedding) {
+    if (!user || !selectedEvent) {
       setData([])
       setLoading(false)
       return
     }
     try {
       setLoading(true)
-      const result = await service.getAll(user.uid, selectedWedding.id)
+      const result = await service.getAll(user.uid, selectedEvent.id)
       setData(result)
     } catch (error) {
       console.error('Error fetching data:', error)
@@ -25,7 +25,7 @@ export function useFirestore(service) {
     } finally {
       setLoading(false)
     }
-  }, [user, service, selectedWedding])
+  }, [user, service, selectedEvent])
 
   useEffect(() => {
     fetchData()
@@ -33,7 +33,7 @@ export function useFirestore(service) {
 
   const add = async (itemData) => {
     try {
-      await service.add(itemData, user.uid, selectedWedding.id)
+      await service.add(itemData, user.uid, selectedEvent.id)
       await fetchData()
       toast.success('Creado exitosamente')
     } catch (error) {

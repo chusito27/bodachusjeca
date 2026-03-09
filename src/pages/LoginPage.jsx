@@ -5,7 +5,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-cream p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-text">Planea Tu Boda</h1>
+          <h1 className="text-3xl font-bold text-text">Planea Tu Evento</h1>
           <p className="text-gold mt-2">Organiza cada detalle</p>
           <div className="w-16 h-0.5 bg-gold mx-auto mt-4" />
         </div>

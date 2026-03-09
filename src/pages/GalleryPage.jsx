@@ -81,7 +81,7 @@ export default function GalleryPage() {
 
         {/* Gallery Grid */}
         {filtered.length === 0 ? (
-          <EmptyState icon="📷" title="No hay fotos" description="Sube fotos de inspiración para tu boda" action={<Button onClick={() => setUploadModalOpen(true)}><IoCloudUploadOutline className="mr-1" /> Subir Fotos</Button>} />
+          <EmptyState icon="📷" title="No hay fotos" description="Sube fotos de inspiración para tu evento" action={<Button onClick={() => setUploadModalOpen(true)}><IoCloudUploadOutline className="mr-1" /> Subir Fotos</Button>} />
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filtered.map(photo => (

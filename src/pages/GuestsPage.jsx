@@ -11,7 +11,7 @@ import EmptyState from '../components/ui/EmptyState'
 import LoadingSpinner from '../components/ui/LoadingSpinner'
 import StatsCard from '../components/ui/StatsCard'
 import { useFirestore } from '../hooks/useFirestore'
-import { useWedding } from '../hooks/useWedding'
+import { useEvent } from '../hooks/useEvent'
 import { guestService } from '../services/guestService'
 import { GUEST_GROUPS, RSVP_STATUS } from '../utils/constants'
 import GuestReport from '../components/guests/GuestReport'
@@ -26,7 +26,7 @@ const emptyGuest = {
 
 export default function GuestsPage() {
   const { data: guests, loading, add, update, remove } = useFirestore(guestService)
-  const { selectedWedding } = useWedding()
+  const { selectedEvent } = useEvent()
   const [modalOpen, setModalOpen] = useState(false)
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [selectedGuest, setSelectedGuest] = useState(null)
@@ -286,7 +286,7 @@ export default function GuestsPage() {
 
         {/* Report Modal */}
         <Modal isOpen={reportOpen} onClose={() => setReportOpen(false)} title="Reporte de Invitados" size="full">
-          <GuestReport guests={guests} stats={stats} onClose={() => setReportOpen(false)} weddingName={selectedWedding?.name} weddingDate={selectedWedding?.date} />
+          <GuestReport guests={guests} stats={stats} onClose={() => setReportOpen(false)} eventName={selectedEvent?.name} eventDate={selectedEvent?.date} />
         </Modal>
       </div>
     </Layout>

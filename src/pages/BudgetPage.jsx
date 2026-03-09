@@ -114,7 +114,7 @@ export default function BudgetPage() {
 
         {/* Expense List */}
         {filtered.length === 0 ? (
-          <EmptyState icon="💰" title="No hay gastos" description="Comienza registrando tus gastos de boda" action={<Button onClick={openCreate}><IoAdd className="mr-1" /> Añadir Gasto</Button>} />
+          <EmptyState icon="💰" title="No hay gastos" description="Comienza registrando los gastos del evento" action={<Button onClick={openCreate}><IoAdd className="mr-1" /> Añadir Gasto</Button>} />
         ) : (
           <Card>
             <div className="overflow-x-auto">

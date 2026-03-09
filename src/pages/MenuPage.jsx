@@ -70,7 +70,7 @@ export default function MenuPage() {
 
         {/* Menu Items */}
         {filtered.length === 0 ? (
-          <EmptyState icon="🍽️" title="No hay platos" description="Configura las opciones de menú para tu boda" action={<Button onClick={openCreate}><IoAdd className="mr-1" /> Añadir Plato</Button>} />
+          <EmptyState icon="🍽️" title="No hay platos" description="Configura las opciones de menú del evento" action={<Button onClick={openCreate}><IoAdd className="mr-1" /> Añadir Plato</Button>} />
         ) : (
           <div className="space-y-8">
             {MENU_CATEGORIES.filter(c => grouped[c.value]).map(cat => (

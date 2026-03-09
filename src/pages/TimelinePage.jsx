@@ -52,7 +52,7 @@ export default function TimelinePage() {
         </div>
 
         {sorted.length === 0 ? (
-          <EmptyState icon="⏰" title="No hay eventos" description="Planifica el cronograma del día de tu boda" action={<Button onClick={openCreate}><IoAdd className="mr-1" /> Añadir Evento</Button>} />
+          <EmptyState icon="⏰" title="No hay eventos" description="Planifica el cronograma del día del evento" action={<Button onClick={openCreate}><IoAdd className="mr-1" /> Añadir Evento</Button>} />
         ) : (
           <div className="relative">
             {/* Timeline line */}

@@ -77,6 +77,13 @@ export const USER_ROLES = [
   { value: 'dueno', label: 'Dueño', color: 'gold' }
 ]
 
+export const EVENT_TYPES = [
+  { value: 'boda', label: 'Boda', icon: '💒' },
+  { value: 'cumpleanos', label: 'Cumpleaños', icon: '🎂' },
+  { value: 'revelacion', label: 'Revelación de Género', icon: '🎀' },
+  { value: 'otro', label: 'Otro', icon: '🎉' }
+]
+
 export const MENU_CATEGORIES = [
   { value: 'entrada', label: 'Entrada' },
   { value: 'plato_fuerte', label: 'Plato Fuerte' },

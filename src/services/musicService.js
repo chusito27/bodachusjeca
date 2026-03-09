@@ -4,17 +4,17 @@ import { collection, doc, getDocs, addDoc, updateDoc, deleteDoc, query, where, o
 const COLLECTION = 'songs'
 
 export const musicService = {
-  async getAll(userId, weddingId) {
-    const q = query(collection(db, COLLECTION), where('userId', '==', userId), where('weddingId', '==', weddingId), orderBy('createdAt', 'desc'))
+  async getAll(userId, eventId) {
+    const q = query(collection(db, COLLECTION), where('userId', '==', userId), where('eventId', '==', eventId), orderBy('createdAt', 'desc'))
     const snapshot = await getDocs(q)
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
   },
 
-  async add(data, userId, weddingId) {
+  async add(data, userId, eventId) {
     return await addDoc(collection(db, COLLECTION), {
       ...data,
       userId,
-      weddingId,
+      eventId,
       createdAt: serverTimestamp()
     })
   },

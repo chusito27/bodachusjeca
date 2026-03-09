@@ -1,31 +1,31 @@
 import { Navigate } from 'react-router-dom'
 import Sidebar from './Sidebar'
 import { useAuth } from '../../hooks/useAuth'
-import { useWedding } from '../../hooks/useWedding'
+import { useEvent } from '../../hooks/useEvent'
 
-export default function Layout({ children, requireWedding = true }) {
+export default function Layout({ children, requireEvent = true }) {
   const { userProfile } = useAuth()
-  const { selectedWedding, loading } = useWedding()
+  const { selectedEvent, loading } = useEvent()
 
-  if (requireWedding && !loading && !selectedWedding) {
-    // Dueño without assigned wedding: show message (don't redirect to /bodas)
+  if (requireEvent && !loading && !selectedEvent) {
+    // Dueño without assigned event: show message (don't redirect to /eventos)
     if (userProfile?.role === 'dueno') {
       return (
         <div className="min-h-screen bg-cream">
           <Sidebar />
           <main className="lg:ml-64 min-h-screen flex items-center justify-center">
             <div className="text-center p-8">
-              <div className="text-5xl mb-4">💒</div>
-              <h2 className="text-xl font-semibold text-text mb-2">Sin boda asignada</h2>
+              <div className="text-5xl mb-4">🎉</div>
+              <h2 className="text-xl font-semibold text-text mb-2">Sin evento asignado</h2>
               <p className="text-text-light text-sm">
-                Aún no tienes una boda asignada. Contacta a un administrador para que te asigne una.
+                Aún no tienes un evento asignado. Contacta a un administrador para que te asigne uno.
               </p>
             </div>
           </main>
         </div>
       )
     }
-    return <Navigate to="/bodas" />
+    return <Navigate to="/eventos" />
   }
 
   return (
