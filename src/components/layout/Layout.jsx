@@ -1,5 +1,6 @@
 import { Navigate } from 'react-router-dom'
 import Sidebar from './Sidebar'
+import MobileNav from './MobileNav'
 import { useAuth } from '../../hooks/useAuth'
 import { useEvent } from '../../hooks/useEvent'
 
@@ -13,7 +14,8 @@ export default function Layout({ children, requireEvent = true }) {
       return (
         <div className="min-h-screen bg-cream">
           <Sidebar />
-          <main className="lg:ml-64 min-h-screen flex items-center justify-center">
+          <MobileNav />
+          <main className="lg:ml-64 min-h-screen pb-16 lg:pb-0 flex items-center justify-center">
             <div className="text-center p-8">
               <div className="text-5xl mb-4">🎉</div>
               <h2 className="text-xl font-semibold text-text mb-2">Sin evento asignado</h2>
@@ -31,7 +33,8 @@ export default function Layout({ children, requireEvent = true }) {
   return (
     <div className="min-h-screen bg-cream">
       <Sidebar />
-      <main className="lg:ml-64 min-h-screen">
+      <MobileNav />
+      <main className="lg:ml-64 min-h-screen pb-16 lg:pb-0">
         {children}
       </main>
     </div>

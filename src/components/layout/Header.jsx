@@ -14,7 +14,7 @@ export default function Header({ title }) {
   }
 
   return (
-    <header className="bg-surface border-b border-border px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between pl-14 lg:pl-4 xl:pl-6">
+    <header className="bg-surface border-b border-border px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
       <h1 className="text-lg sm:text-xl font-bold text-text truncate">{title}</h1>
       <div className="flex items-center gap-3">
         {isAdmin && events.length > 1 && (

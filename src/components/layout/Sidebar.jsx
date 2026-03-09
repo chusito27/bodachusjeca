@@ -1,6 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { IoHomeOutline, IoPeopleOutline, IoWalletOutline, IoBusinessOutline, IoCheckboxOutline, IoGridOutline, IoTimeOutline, IoMusicalNotesOutline, IoImagesOutline, IoRestaurantOutline, IoLogOutOutline, IoMenuOutline, IoCloseOutline, IoSunnyOutline, IoMoonOutline, IoHeartOutline, IoShieldOutline } from 'react-icons/io5'
-import { useState } from 'react'
+import { IoHomeOutline, IoPeopleOutline, IoWalletOutline, IoBusinessOutline, IoCheckboxOutline, IoGridOutline, IoTimeOutline, IoMusicalNotesOutline, IoImagesOutline, IoRestaurantOutline, IoLogOutOutline, IoSunnyOutline, IoMoonOutline, IoHeartOutline, IoShieldOutline } from 'react-icons/io5'
 import { useAuth } from '../../hooks/useAuth'
 import { useTheme } from '../../hooks/useTheme'
 import { useEvent } from '../../hooks/useEvent'
@@ -22,7 +21,6 @@ const navItems = [
 ]
 
 export default function Sidebar() {
-  const [mobileOpen, setMobileOpen] = useState(false)
   const { logout, userProfile } = useAuth()
   const { theme, toggleTheme } = useTheme()
   const { selectedEvent } = useEvent()
@@ -40,8 +38,8 @@ export default function Sidebar() {
     }
   }
 
-  const sidebarContent = (
-    <>
+  return (
+    <aside className="hidden lg:flex lg:flex-col fixed top-0 left-0 h-full w-64 bg-dark z-40">
       <div className="px-6 py-6">
         <h1 className="text-xl font-bold text-gold">
           {selectedEvent?.name || 'Planea Tu Evento'}
@@ -55,7 +53,6 @@ export default function Sidebar() {
         {isAdmin && (
           <NavLink
             to="/eventos"
-            onClick={() => setMobileOpen(false)}
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors mb-1 ${
                 isActive
@@ -71,7 +68,6 @@ export default function Sidebar() {
         {isAdmin && (
           <NavLink
             to="/usuarios"
-            onClick={() => setMobileOpen(false)}
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors mb-1 ${
                 isActive
@@ -89,7 +85,6 @@ export default function Sidebar() {
             key={to}
             to={to}
             end={to === '/'}
-            onClick={() => setMobileOpen(false)}
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors mb-1 ${
                 isActive
@@ -120,28 +115,6 @@ export default function Sidebar() {
           Cerrar Sesión
         </button>
       </div>
-    </>
-  )
-
-  return (
-    <>
-      {/* Mobile toggle */}
-      <button
-        onClick={() => setMobileOpen(!mobileOpen)}
-        className="fixed top-4 left-4 z-50 lg:hidden bg-dark text-white p-2 rounded-lg shadow-lg"
-      >
-        {mobileOpen ? <IoCloseOutline size={24} /> : <IoMenuOutline size={24} />}
-      </button>
-
-      {/* Mobile overlay */}
-      {mobileOpen && (
-        <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setMobileOpen(false)} />
-      )}
-
-      {/* Sidebar */}
-      <aside className={`fixed top-0 left-0 h-full w-64 bg-dark flex flex-col z-40 transition-transform duration-300 lg:translate-x-0 ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        {sidebarContent}
-      </aside>
-    </>
+    </aside>
   )
 }
